@@ -18,7 +18,7 @@ This plugin will re-write the URL's of all WP images to ensure they run through 
 
 - Cloudflare
     - Site with proxy **ENABLED**
-    - Account with Transform **ENABLED**
+    - Account with Image Transformations **ENABLED**
 - WordPress 5.0+
 
 ## Installation
