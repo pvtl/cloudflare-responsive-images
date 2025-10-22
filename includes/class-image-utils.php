@@ -172,30 +172,117 @@ class CFRI_ImageUtils {
     /**
      * Get Cloudflare Transform URL
      */
-    private function getCloudflareTransformUrl($url, $width) {
-        $site_url = get_site_url();
+    private function getCloudflareTransformUrl($url, $size = 'full') {
+        // Check if URL is from our upload directory
+        $upload_dir = wp_upload_dir();
+        $is_upload_url = strpos($url, $upload_dir['baseurl']) !== false;
+        $is_transformed_url = strpos($url, '/cdn-cgi/image/') !== false;
+        
+        if (!$is_upload_url && !$is_transformed_url) {
+            return $url;
+        }
+        
+        // Build Cloudflare Transform URL using current domain (without /wp path)
+        $site_url = home_url();
+        
+        // If it's already a transformed URL, extract the original path
+        if ($is_transformed_url) {
+            // Extract original path from Cloudflare URL
+            $path_match = preg_match('/\/cdn-cgi\/image\/[^\/]+\/(.+)$/', $url, $matches);
+            if ($path_match && isset($matches[1])) {
+                // The extracted path already includes the full path, so use it directly
+                $url = $site_url . $matches[1];
+            }
+        }
+        
+        // Get size dimensions
+        $width = $this->getSizeWidth($size);
         $transform_params = array();
         
         // Always add format=auto
         $transform_params[] = 'format=auto';
         
+        // Add width parameter
         if ($width) {
             $transform_params[] = 'width=' . $width;
         }
         
+        // Add quality parameter
         if ($this->options['quality'] && $this->options['quality'] != 85) {
             $transform_params[] = 'quality=' . $this->options['quality'];
         }
-        
+
         // Add slow-connection-quality parameter
         $transform_params[] = 'slow-connection-quality=30';
         
         if (!empty($transform_params)) {
             $transform_string = implode(',', $transform_params);
-            return $site_url . '/cdn-cgi/image/' . $transform_string . '/' . $url;
+            
+            // Extract the full path from the domain root
+            $parsed_url = parse_url($url);
+            
+            // Handle different URL formats consistently
+            if (isset($parsed_url['path'])) {
+                $full_path = $parsed_url['path'];
+            } else {
+                // If no path, use the full URL as path
+                $full_path = $url;
+            }
+            
+            // Ensure path starts with /
+            if (!empty($full_path) && $full_path[0] !== '/') {
+                $full_path = '/' . $full_path;
+            }
+            
+            // Ensure we have the complete WordPress uploads path structure
+            // If the path starts with /uploads/, prepend /app/ to match WordPress structure
+            if (strpos($full_path, '/uploads/') === 0) {
+                $full_path = '/app' . $full_path;
+            }
+            
+            // Add onerror parameter to redirect to original image
+            $transform_string .= ',onerror=redirect';
+            
+            $transformed_url = $site_url . '/cdn-cgi/image/' . $transform_string . $full_path;
+            
+            return $transformed_url;
         }
         
         return $url;
+    }
+    
+    /**
+     * Get width for image size
+     */
+    private function getSizeWidth($size) {
+        // If size is already a number, return it
+        if (is_numeric($size)) {
+            return (int) $size;
+        }
+        
+        if ($size === 'full') {
+            return null;
+        }
+
+        // Use WordPress default sizes
+        $default_sizes = array(
+            'thumbnail' => 150,
+            'medium' => 300,
+            'medium_large' => 768,
+            'large' => 1024
+        );
+        
+        if (!is_array($size) && array_key_exists($size, $default_sizes)) {
+            $default_size = $default_sizes[$size];
+            // Handle case where default size might be an array with width property
+            if (is_array($default_size) && isset($default_size['width'])) {
+                return (int) $default_size['width'];
+            } elseif (is_numeric($default_size)) {
+                return (int) $default_size;
+            }
+        }
+        
+        return null;
     }
     
 }
