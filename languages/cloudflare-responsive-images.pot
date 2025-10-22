@@ -1,0 +1,169 @@
+# Copyright (C) 2025 Cloudflare Responsive Images
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Cloudflare Responsive Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloudflare-responsive-images\n"
+"POT-Creation-Date: 2025-01-27 12:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: cloudflare-responsive-images.php:12
+msgid "Cloudflare Responsive Images"
+msgstr ""
+
+#: cloudflare-responsive-images.php:13
+msgid "Disables WordPress image variants and uses Cloudflare Transform for responsive images."
+msgstr ""
+
+#: includes/class-admin.php:25
+msgid "Cloudflare Responsive Images"
+msgstr ""
+
+#: includes/class-admin.php:26
+msgid "Cloudflare Images"
+msgstr ""
+
+#: includes/class-admin.php:35
+msgid "General Settings"
+msgstr ""
+
+#: includes/class-admin.php:42
+msgid "Cloudflare Domain"
+msgstr ""
+
+#: includes/class-admin.php:48
+msgid "Enable Cloudflare Transform"
+msgstr ""
+
+#: includes/class-admin.php:54
+msgid "Disable WordPress Image Sizes"
+msgstr ""
+
+#: includes/class-admin.php:60
+msgid "Transform Settings"
+msgstr ""
+
+#: includes/class-admin.php:66
+msgid "Image Quality"
+msgstr ""
+
+#: includes/class-admin.php:72
+msgid "Image Format"
+msgstr ""
+
+#: includes/class-admin.php:78
+msgid "Enable WebP"
+msgstr ""
+
+#: includes/class-admin.php:84
+msgid "Enable AVIF"
+msgstr ""
+
+#: includes/class-admin.php:90
+msgid "Custom Image Sizes"
+msgstr ""
+
+#: includes/class-admin.php:96
+msgid "Image Sizes"
+msgstr ""
+
+#: includes/class-admin.php:120
+msgid "Configure Cloudflare Transform settings for responsive images. This plugin disables WordPress image size generation and uses Cloudflare Transform instead."
+msgstr ""
+
+#: includes/class-admin.php:130
+msgid "How it works:"
+msgstr ""
+
+#: includes/class-admin.php:131
+msgid "Disables WordPress automatic image size generation to save storage space"
+msgstr ""
+
+#: includes/class-admin.php:132
+msgid "Uses Cloudflare Transform to generate responsive images on-demand"
+msgstr ""
+
+#: includes/class-admin.php:133
+msgid "Automatically adds Cloudflare Transform URLs to all image sources"
+msgstr ""
+
+#: includes/class-admin.php:134
+msgid "Supports WebP and AVIF formats for better compression"
+msgstr ""
+
+#: includes/class-admin.php:136
+msgid "Cloudflare Setup:"
+msgstr ""
+
+#: includes/class-admin.php:137
+msgid "Make sure your site is using Cloudflare and that Transform is enabled in your Cloudflare dashboard."
+msgstr ""
+
+#: includes/class-admin.php:150
+msgid "Configure basic settings for the plugin."
+msgstr ""
+
+#: includes/class-admin.php:155
+msgid "Configure Cloudflare Transform parameters."
+msgstr ""
+
+#: includes/class-admin.php:160
+msgid "Define custom image sizes for Cloudflare Transform."
+msgstr ""
+
+#: includes/class-admin.php:167
+msgid "Your Cloudflare domain (e.g., https://example.com)"
+msgstr ""
+
+#: includes/class-admin.php:175
+msgid "Enable Cloudflare Transform for images"
+msgstr ""
+
+#: includes/class-admin.php:183
+msgid "Disable WordPress image size generation"
+msgstr ""
+
+#: includes/class-admin.php:184
+msgid "This will prevent WordPress from generating multiple image sizes and save storage space."
+msgstr ""
+
+#: includes/class-admin.php:192
+msgid "Image quality (1-100)"
+msgstr ""
+
+#: includes/class-admin.php:200
+msgid "Auto (recommended)"
+msgstr ""
+
+#: includes/class-admin.php:214
+msgid "Enable WebP format"
+msgstr ""
+
+#: includes/class-admin.php:222
+msgid "Enable AVIF format"
+msgstr ""
+
+#: includes/class-admin.php:230
+msgid "Size name"
+msgstr ""
+
+#: includes/class-admin.php:231
+msgid "Width"
+msgstr ""
+
+#: includes/class-admin.php:232
+msgid "Remove"
+msgstr ""
+
+#: includes/class-admin.php:233
+msgid "Add Size"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "Define custom image sizes for Cloudflare Transform. These will be used instead of WordPress default sizes."
+msgstr ""

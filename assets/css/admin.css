@@ -1,0 +1,123 @@
+/**
+ * Admin styles for Cloudflare Responsive Images plugin
+ */
+
+.cfri-admin-header {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.cfri-info-box {
+    background: #f0f6fc;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.cfri-info-box h3 {
+    margin-top: 0;
+    color: #1d2327;
+}
+
+.cfri-info-box ol {
+    margin: 10px 0;
+}
+
+.cfri-info-box li {
+    margin: 5px 0;
+}
+
+#cfri-custom-sizes {
+    max-width: 600px;
+}
+
+.cfri-size-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.cfri-size-row input[type="text"] {
+    flex: 1;
+    min-width: 120px;
+}
+
+.cfri-size-row input[type="number"] {
+    width: 100px;
+}
+
+.cfri-remove-size {
+    color: #d63638;
+    border-color: #d63638;
+}
+
+.cfri-remove-size:hover {
+    background: #d63638;
+    color: #fff;
+}
+
+#cfri-add-size {
+    margin-top: 10px;
+}
+
+.form-table th {
+    width: 200px;
+}
+
+.form-table td {
+    padding: 15px 10px;
+}
+
+.form-table input[type="url"],
+.form-table input[type="number"] {
+    width: 200px;
+}
+
+.form-table select {
+    width: 200px;
+}
+
+.form-table .description {
+    font-style: italic;
+    color: #646970;
+    margin-top: 5px;
+}
+
+.cfri-transform-settings {
+    display: none;
+}
+
+.cfri-transform-settings.show {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 782px) {
+    .cfri-size-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .cfri-size-row input,
+    .cfri-size-row button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .form-table th,
+    .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .form-table th {
+        border-bottom: none;
+        padding-bottom: 5px;
+    }
+}
