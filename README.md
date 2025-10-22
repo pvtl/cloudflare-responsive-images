@@ -1,6 +1,10 @@
 # Cloudflare Responsive Images
 
-A WordPress plugin that optimizes images using Cloudflare Transform instead of generating multiple image sizes.
+By default, WordPress automatically creates several sizes of each image uploaded to the media library, and will save them to disk. This can use a lot of disk space on sites with many images (or image variants).
+
+Cloudflare Images can solve this by transforming the original images into other sizes on the fly.
+
+This plugin will re-write the URL's of all WP images to ensure they run through the Cloudflare Image transformation serivce.
 
 ## What it does
 
@@ -12,18 +16,16 @@ A WordPress plugin that optimizes images using Cloudflare Transform instead of g
 
 ## Requirements
 
+- Cloudflare
+    - Site with proxy **ENABLED**
+    - Account with Transform **ENABLED**
 - WordPress 5.0+
-- PHP 7.4+
-- Cloudflare account with Transform enabled
-- Site using Cloudflare as CDN
 
 ## Installation
 
 ### Manual Installation
 1. Upload the plugin to `/wp-content/plugins/cloudflare-responsive-images/`
 2. Activate the plugin in WordPress admin
-3. Go to **Settings > Cloudflare Images** to configure
-4. Enter your Cloudflare domain and test the connection
 
 ### Composer Installation
 ```bash
@@ -34,16 +36,9 @@ composer config repositories.cloudflare-responsive-images git https://github.com
 composer require "pvtl/cloudflare-responsive-images:~1.0"
 ```
 
-## How it works
-
-1. Disables WordPress automatic image size generation during upload
-2. Intercepts image URLs and converts them to use Cloudflare Transform
-3. Generates responsive `srcset` and `sizes` attributes
-4. Serves optimized formats (WebP/AVIF) when supported
-
 ## Author
 
-Pivotal Agency
+Pivotal Agency Pty Ltd
 
 ## License
 
