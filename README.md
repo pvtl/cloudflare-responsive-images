@@ -19,10 +19,20 @@ A WordPress plugin that optimizes images using Cloudflare Transform instead of g
 
 ## Installation
 
+### Manual Installation
 1. Upload the plugin to `/wp-content/plugins/cloudflare-responsive-images/`
 2. Activate the plugin in WordPress admin
 3. Go to **Settings > Cloudflare Images** to configure
 4. Enter your Cloudflare domain and test the connection
+
+### Composer Installation
+```bash
+# 1. Get it ready (to use a repo outside of packagist)
+composer config repositories.cloudflare-responsive-images git https://github.com/pvtl/cloudflare-responsive-images.git
+
+# 2. Install the Plugin - we want all updates from this major version (while non-breaking)
+composer require "pvtl/cloudflare-responsive-images:~1.0"
+```
 
 ## How it works
 

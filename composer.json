@@ -1,0 +1,16 @@
+{
+  "name": "pvtl/cloudflare-responsive-images",
+  "description": "Disables WordPress image variants and uses Cloudflare Transform for responsive images.",
+  "homepage": "https://github.com/pvtl/cloudflare-responsive-images",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Pivotal Agency",
+      "homepage": "https://www.pivotalagency.com.au/"
+    }
+  ],
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=7.4"
+  }
+}
