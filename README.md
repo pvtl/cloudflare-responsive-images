@@ -23,18 +23,14 @@ This plugin will re-write the URL's of all WP images to ensure they run through 
 
 ## Installation
 
-### Manual Installation
-1. Upload the plugin to `/wp-content/plugins/cloudflare-responsive-images/`
-2. Activate the plugin in WordPress admin
-
-### Composer Installation
+### Composer / Wordpress Bedrock
 ```bash
-# 1. Get it ready (to use a repo outside of packagist)
-composer config repositories.cloudflare-responsive-images git https://github.com/pvtl/cloudflare-responsive-images.git
-
-# 2. Install the Plugin - we want all updates from this major version (while non-breaking)
-composer require "pvtl/cloudflare-responsive-images:~1.0"
+composer require pvtl/cloudflare-responsive-images
 ```
+
+### Manual
+1. Upload plugin to `wp-content/plugins/cloudflare-responsive-images/`
+2. Activate plugin in WordPress admin
 
 ## Author
 

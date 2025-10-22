@@ -1,7 +1,7 @@
 {
   "name": "pvtl/cloudflare-responsive-images",
   "description": "Disable WordPress responsive images and use Cloudflare Image Transformations instead.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/pvtl/cloudflare-responsive-images",
   "license": "MIT",
   "authors": [
