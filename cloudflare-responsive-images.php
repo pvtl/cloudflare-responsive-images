@@ -94,7 +94,7 @@ class CloudflareResponsiveImages {
         $default_options = array(
             'enable_transform' => true,
             'disable_image_sizes' => true,
-            'quality' => 85
+            'quality' => 100
         );
         
         $saved_options = get_option('cfri_options', $default_options);
@@ -416,7 +416,7 @@ class CloudflareResponsiveImages {
         }
 
         // Add slow-connection-quality parameter
-        $transform_params[] = 'slow-connection-quality=30';
+        $transform_params[] = 'slow-connection-quality=75';
         
         if (!empty($transform_params)) {
             $transform_string = implode(',', $transform_params);
