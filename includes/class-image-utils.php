@@ -261,7 +261,7 @@ class CFRI_ImageUtils {
         }
         
         if ($size === 'full') {
-            return null;
+            return $this->getMaxWidth();
         }
 
         // Use WordPress default sizes
@@ -284,5 +284,14 @@ class CFRI_ImageUtils {
         
         return null;
     }
-    
+
+    /**
+     * Get maximum width for full-size images
+     */
+    private function getMaxWidth() {
+        $max_width = isset($this->options['max_width']) ? absint($this->options['max_width']) : 1920;
+
+        return max(320, min(3840, $max_width));
+    }
+
 }

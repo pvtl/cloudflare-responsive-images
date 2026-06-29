@@ -83,6 +83,14 @@ class CFRI_Admin {
             'cloudflare-responsive-images',
             'cfri_transform'
         );
+
+        add_settings_field(
+            'max_width',
+            __('Max Image Width', 'cloudflare-responsive-images'),
+            array($this, 'maxWidthCallback'),
+            'cloudflare-responsive-images',
+            'cfri_transform'
+        );
     }
     
     /**
@@ -162,6 +170,19 @@ class CFRI_Admin {
         $sanitized['enable_transform'] = isset($input['enable_transform']) ? (bool) $input['enable_transform'] : false;
         $sanitized['disable_image_sizes'] = isset($input['disable_image_sizes']) ? (bool) $input['disable_image_sizes'] : false;
         $sanitized['quality'] = absint($input['quality']);
+        $sanitized['max_width'] = absint($input['max_width']);
+
+        if ($sanitized['quality'] < 1) {
+            $sanitized['quality'] = 1;
+        } elseif ($sanitized['quality'] > 100) {
+            $sanitized['quality'] = 100;
+        }
+
+        if ($sanitized['max_width'] < 320) {
+            $sanitized['max_width'] = 320;
+        } elseif ($sanitized['max_width'] > 3840) {
+            $sanitized['max_width'] = 3840;
+        }
         
         return $sanitized;
     }
@@ -213,6 +234,20 @@ class CFRI_Admin {
         <?php
     }
     
+    /**
+     * Max width callback
+     */
+    public function maxWidthCallback() {
+        $options = get_option('cfri_options', array());
+        $value = isset($options['max_width']) ? $options['max_width'] : 1920;
+        ?>
+        <div class="cfri-transform-settings">
+            <input type="number" id="max_width" name="cfri_options[max_width]" value="<?php echo esc_attr($value); ?>" min="320" max="3840" step="1" />
+            <p class="description"><?php _e('Maximum width (px) for full-size images. Prevents oversized originals from being served via the main src URL.', 'cloudflare-responsive-images'); ?></p>
+        </div>
+        <?php
+    }
+
     /**
      * Quality callback
      */

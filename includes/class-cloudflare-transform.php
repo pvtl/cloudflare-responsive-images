@@ -56,8 +56,6 @@ class CFRI_CloudflareTransform {
         // Use options defaults if not specified
         $width = $width ?: $this->getDefaultWidth();
         $quality = $quality ?: $this->options['quality'];
-        
-        // Build transform parameters
         $transform_params = array();
         
         // Always add format=auto
@@ -76,7 +74,7 @@ class CFRI_CloudflareTransform {
         }
         
         // Add slow-connection-quality parameter
-        $transform_params[] = 'slow-connection-quality=30';
+        $transform_params[] = 'slow-connection-quality=75';
         
         // Build final URL
         if (!empty($transform_params)) {
@@ -205,9 +203,9 @@ class CFRI_CloudflareTransform {
      * Get default width based on context
      */
     private function getDefaultWidth() {
-        // Return the largest default size
-        $default_sizes = array(150, 300, 768, 1024);
-        return max($default_sizes);
+        $max_width = isset($this->options['max_width']) ? absint($this->options['max_width']) : 1920;
+
+        return max(320, min(3840, $max_width));
     }
     
     /**
