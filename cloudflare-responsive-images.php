@@ -281,6 +281,10 @@ class CloudflareResponsiveImages {
                         $original_url = $parsed_src['scheme'] . '://' . $parsed_src['host'] . '/' . ltrim($url_matches[1], '/');
                     }
                 }
+
+                if ($this->shouldSkipTransform($original_url)) {
+                    return $matches[0];
+                }
                 
                 // Try to extract attachment ID from the original URL
                 $attachment_id = $this->getAttachmentIdFromUrl($original_url);
@@ -290,8 +294,16 @@ class CloudflareResponsiveImages {
                 if ($attachment_id) {
                     // Get the original URL directly from the attachment metadata
                     $attachment_meta = wp_get_attachment_metadata($attachment_id);
+                    if (!is_array($attachment_meta) || empty($attachment_meta['file'])) {
+                        return $matches[0];
+                    }
+
                     $upload_dir = wp_upload_dir();
                     $original_attachment_url = $upload_dir['baseurl'] . '/' . $attachment_meta['file'];
+
+                    if ($this->shouldSkipTransform($original_attachment_url)) {
+                        return $matches[0];
+                    }
                     
                     $srcset = $this->generateResponsiveSrcsetFromUrl($original_attachment_url);
                 } else {
@@ -373,6 +385,32 @@ class CloudflareResponsiveImages {
     }
     
     /**
+     * Determine whether a URL should bypass Cloudflare Transform.
+     */
+    private function shouldSkipTransform($url) {
+        if (empty($url)) {
+            return true;
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if (empty($path)) {
+            return true;
+        }
+
+        $filename = basename($path);
+        if ($filename === '' || $filename === 'uploads' || $filename === 'app') {
+            return true;
+        }
+
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (in_array($extension, array('svg', 'svgz'), true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get Cloudflare Transform URL
      */
     private function getCloudflareTransformUrl($url, $size = 'full', $format = null) {
@@ -396,6 +434,10 @@ class CloudflareResponsiveImages {
                 // The extracted path already includes the full path, so use it directly
                 $url = $site_url . $matches[1];
             }
+        }
+
+        if ($this->shouldSkipTransform($url)) {
+            return $url;
         }
         
         // Get size dimensions
@@ -485,7 +527,7 @@ class CloudflareResponsiveImages {
      * Generate responsive srcset from URL
      */
     private function generateResponsiveSrcsetFromUrl($url) {
-        if (!$url) {
+        if (!$url || $this->shouldSkipTransform($url)) {
             return '';
         }
         
