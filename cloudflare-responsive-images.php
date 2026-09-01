@@ -3,7 +3,7 @@
  * Plugin Name: Cloudflare Responsive Images
  * Plugin URI: https://github.com/your-username/cloudflare-responsive-images
  * Description: Disables WordPress image variants and uses Cloudflare Transform for responsive images.
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: Pivotal Agency
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,9 @@ if (!defined('ABSPATH')) {
 define('CFRI_PLUGIN_FILE', __FILE__);
 define('CFRI_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CFRI_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('CFRI_VERSION', '1.3.0');
+define('CFRI_VERSION', '1.3.1');
+
+require_once CFRI_PLUGIN_DIR . 'includes/class-attachment-path.php';
 
 /**
  * Main plugin class
@@ -285,31 +287,10 @@ class CloudflareResponsiveImages {
                 if ($this->shouldSkipTransform($original_url)) {
                     return $matches[0];
                 }
-                
-                // Try to extract attachment ID from the original URL
-                $attachment_id = $this->getAttachmentIdFromUrl($original_url);
-                
-                // Generate srcset if we have an attachment ID
-                $srcset = '';
-                if ($attachment_id) {
-                    // Get the original URL directly from the attachment metadata
-                    $attachment_meta = wp_get_attachment_metadata($attachment_id);
-                    if (!is_array($attachment_meta) || empty($attachment_meta['file'])) {
-                        return $matches[0];
-                    }
 
-                    $upload_dir = wp_upload_dir();
-                    $original_attachment_url = $upload_dir['baseurl'] . '/' . $attachment_meta['file'];
-
-                    if ($this->shouldSkipTransform($original_attachment_url)) {
-                        return $matches[0];
-                    }
-                    
-                    $srcset = $this->generateResponsiveSrcsetFromUrl($original_attachment_url);
-                } else {
-                    // Fallback: try to use the extracted original URL directly
-                    $srcset = $this->generateResponsiveSrcsetFromUrl($original_url);
-                }
+                // Always build srcset from the same URL as src so filename
+                // collisions across upload months cannot swap images.
+                $srcset = $this->generateResponsiveSrcsetFromUrl($original_url);
                 
                 // Transform the main src URL with quality and width parameters
                 $transformed_src = $this->getCloudflareTransformUrl($original_url, 'full');
@@ -497,29 +478,48 @@ class CloudflareResponsiveImages {
     }
     
     /**
-     * Get attachment ID from URL
+     * Get attachment ID from URL using the full uploads-relative path.
+     *
+     * Matches on exact `_wp_attached_file` values (e.g. 2026/08/GalleryImg2.jpg)
+     * so same basenames in different months cannot collide, and so filenames
+     * that merely contain another basename (Pretty-Memories-GalleryImg2.jpg)
+     * are not matched via LIKE.
      */
     private function getAttachmentIdFromUrl($url) {
-        // Extract the filename from the URL
-        $filename = basename(parse_url($url, PHP_URL_PATH));
-        
-        // Query for the attachment by filename
-        $attachment = get_posts(array(
+        $relative_path = CFRI_AttachmentPath::relativeFromUrl($url);
+        if ($relative_path === '') {
+            return 0;
+        }
+
+        // Prefer core resolver when it can map the absolute URL.
+        if (function_exists('attachment_url_to_postid')) {
+            $attachment_id = attachment_url_to_postid($url);
+            if ($attachment_id) {
+                $attached_file = get_post_meta($attachment_id, '_wp_attached_file', true);
+                if (is_string($attached_file) && CFRI_AttachmentPath::pathsMatch($relative_path, $attached_file)) {
+                    return (int) $attachment_id;
+                }
+            }
+        }
+
+        $attachments = get_posts(array(
             'post_type' => 'attachment',
             'post_status' => 'inherit',
+            'posts_per_page' => 1,
+            'fields' => 'ids',
             'meta_query' => array(
                 array(
                     'key' => '_wp_attached_file',
-                    'value' => $filename,
-                    'compare' => 'LIKE'
+                    'value' => $relative_path,
+                    'compare' => '='
                 )
             )
         ));
-        
-        if (!empty($attachment)) {
-            return $attachment[0]->ID;
+
+        if (!empty($attachments)) {
+            return (int) $attachments[0];
         }
-        
+
         return 0;
     }
     
